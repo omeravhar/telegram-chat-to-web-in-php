@@ -19,7 +19,7 @@ $("#submitChat").on("click",function(){
     let customerName = "omer avhar";
     //concatenated name and text for server
     let textForServer = JSON.stringify({name:customerName,text:text});
-    console.log(textForServer);
+//    console.log(textForServer);
     //send text
     $.ajax({
       type: "POST",
@@ -50,17 +50,21 @@ $("#submitChat").on("click",function(){
 
 
 function getServerResponse(customerName){
+    
     $.ajax({
       type: "POST",
-      url: "server.php",
+      url: "https://dev.kornit.com/telegram/server.php",
       data: JSON.stringify({custName:customerName}),
       
       success: function(resultData){
+          
         let textHistory = localStorage.getItem("chat"); 
         textHistory = localStorage.getItem("chat") ? textHistory : "";
-//        console.log(textHistory);
-//        alert(textHistory);
-//          /textHistory = textHistory ? textHistory + "\n" + "kornit:"+text : "you:"+text;
+        let textFromResultData = resultData ? resultData : "" ;
+       
+        textHistory = textFromResultData ? textHistory + "\n" + textFromResultData : textHistory;
+        localStorage.setItem("chat",textHistory);
+        $("#chatFull").val(textHistory);
       }
     });
 } 
